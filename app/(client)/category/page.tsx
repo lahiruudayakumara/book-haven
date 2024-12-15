@@ -1,0 +1,109 @@
+"use client";
+
+import { IBook, IGetBooK } from "@/types/book";
+import { useEffect, useState } from "react";
+
+import BookViewBox from "@/components/book-view/book-view-box";
+import ErrorResponse from "@/types/error-response";
+import { PageHeader } from "@/components/page-header";
+import Pagination from "@/components/pagination";
+import { ScreenContainer } from "@/components/screen-container";
+import allBooks from "@/lib/api-requests/book/all-books";
+import { categories } from "@/data/category";
+
+export default function Writer() {
+  const [books, setBooks] = useState<IBook[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(8);
+  const [totalCount, setTotalCount] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [category, setCategory] =useState<string>("All")
+
+  useEffect(() => {
+    const fetchEmployeeDetails = async (): Promise<
+      IGetBooK | ErrorResponse
+    > => {
+      try {
+        const response = await allBooks({
+          limit: limit,
+          page: currentPage,
+          category: category != "All" ? category : ""
+        });
+
+        return response;
+      } catch (error) {
+        console.error("Error fetching books:", error);
+        return { error: "Error fetching books" };
+      }
+    };
+
+    fetchEmployeeDetails().then((r) => {
+      if ("error" in r) {
+        console.error(r.error);
+        setIsLoading(false);
+        return;
+      }
+
+      const mappedBooks = r.books.map((book: any) => ({
+        id: book._id,
+        Title: book.Title,
+        Price: book.Price,
+        DiscountPrice: book.DiscountPrice,
+        Category: book.category,
+        Writer: book.Writer,
+        BookURL: book.BookURL,
+        ImageURL: book.ImageURL,
+        Description: book.Description,
+      }));
+
+      setBooks(mappedBooks);
+      setCurrentPage(r.currentPage);
+      setTotalPages(r.totalPages);
+      setTotalCount(r.totalCount);
+      setIsLoading(false);
+    });
+  }, [currentPage, limit, category]);
+  return (
+    <div>
+      <PageHeader
+        title="Book Categories"
+        description="Browse through various book categories, from fiction to non-fiction, and find your next favorite read by talented writers."
+      />
+      <div className="flex flex-col items-center md:min-h-[27vh] justify-center space-y-2">
+        <ScreenContainer>
+          <div className="grid  grid-cols-4 w-full py-4 gap-8">
+            <div className="min-h-[350px] md:max-h-[550px] bg-slate-100 p-4 rounded-md">
+              <h1 className="text-black text-xl font-bold">Categoryies</h1>
+              <div className="flex flex-col mt-4 space-y-4">
+                {categories.map((item) => (
+                  <span key={item.id} onClick={() => {setCategory(item.name)}} className={`text-primary cursor-pointer ${category === item.name ? "font-bold" : ""}`}>
+                    {item.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="col-span-3">
+              <div className="w-full flex bg-slate-100 mb-4 rounded-md text-black p-2 px-4">
+                <div className="ml-auto ">Filter</div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-col-3 lg:grid-cols-4 gap-3 md:gap-4">
+                {books.map((item, index) => (
+                  <BookViewBox key={index} book={item} />
+                ))}
+              </div>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                onItemsPerPageChange={setLimit}
+                itemsPerPage={limit}
+                onPageChange={setCurrentPage}
+                itemsPerPageOptions={[8, 16, 32]}
+              />
+            </div>
+          </div>
+        </ScreenContainer>
+      </div>
+    </div>
+  );
+}
