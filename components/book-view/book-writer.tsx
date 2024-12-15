@@ -1,11 +1,8 @@
 "use client";
 
-import { CirclePlus, Eye, ShoppingBag } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 
-import { BookViewPopup } from "./book-view-popup";
 import Image from "next/image";
-import { useCart } from "@/context";
 
 interface Props {
   writer: {

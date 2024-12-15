@@ -25,7 +25,7 @@ export default async function postSubscribe(email: string): Promise<ErrorRespons
         }
 
         return await response.json();
-    } catch (error: any) {
+    } catch (error: unknown) {
         Logger.error("Error:", error);
         return { error: "Failed to subscribe" };
     }

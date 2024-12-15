@@ -4,6 +4,10 @@ import BookModel from "@/models/book";
 import Logger from "@/utils/logger";
 import mongodb from "@/lib/database/mongodb";
 
+interface BookFilter {
+    Category?: string | string[];
+}
+
 export async function POST(request: NextRequest) {
     try {
         await mongodb();
@@ -12,7 +16,7 @@ export async function POST(request: NextRequest) {
         const page = parseInt(formData.get("page")?.toString() || "1", 10);
         const limit = parseInt(formData.get("limit")?.toString() || "10", 10);
 
-        let filter: any = {};
+        let filter: BookFilter = {};
         // if (search) {
         //     filter = { ...filter, name: { $regex: search, $options: "i" } };
         // }

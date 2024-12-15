@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-
 import BookViewBox from "./book-view-box";
 import Pagination from "../pagination";
+import React from "react";
 
 interface Props {
   book: {
-    id: string;
+    _id: string;
     Title: string;
     Price: GLfloat;
     DiscountPrice: GLfloat;
@@ -36,7 +35,7 @@ const BookViewArea: React.FC<Props> = ({
   onPageChange,
   onLimitChange
 }) => {
-  const [popupView, setPopupView] = useState<boolean>(false);
+  // const [popupView, setPopupView] = useState<boolean>(false);
 
   return (
     <div className="w-full my-8 px-4 md:px-0">

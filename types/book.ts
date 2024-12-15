@@ -1,5 +1,5 @@
 export interface IBook {
-  id: string;
+  _id: string;
   Title: string;
   Price: GLfloat;
   DiscountPrice: GLfloat;

@@ -1,6 +1,6 @@
 "use client";
 
-import { Archive, ShoppingCart, Trash2 } from "lucide-react";
+import { ShoppingCart, Trash2 } from "lucide-react";
 
 import CheckoutPopup from "@/components/checkout/checkout-popup";
 import Image from "next/image";

@@ -1,9 +1,7 @@
 import "./globals.css";
 
 import { CartProvider } from "@/context";
-import { Elements } from "@stripe/react-stripe-js";
 import type { Metadata } from "next";
-import { loadStripe } from "@stripe/stripe-js";
 import localFont from "next/font/local";
 
 const geistSans = localFont({
@@ -32,9 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-gray-700`}
       >
-        
-          <CartProvider>{children}</CartProvider>
-
+        <CartProvider>{children}</CartProvider>
       </body>
     </html>
   );

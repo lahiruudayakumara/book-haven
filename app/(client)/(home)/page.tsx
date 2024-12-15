@@ -13,10 +13,9 @@ import allBooks from "@/lib/api-requests/book/all-books";
 export default function Home() {
   const [books, setBooks] = useState<IBook[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
   const [limit, setLimit] = useState<number>(12);
   const [totalCount, setTotalCount] = useState<number>(1)
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchEmployeeDetails = async (): Promise<
@@ -38,16 +37,16 @@ export default function Home() {
     fetchEmployeeDetails().then((r) => {
       if ("error" in r) {
         console.error(r.error);
-        setIsLoading(false);
+        // setIsLoading(false);
         return;
       }
 
-      const mappedBooks = r.books.map((book: any) => ({
-        id: book._id,
+      const mappedBooks = r.books.map((book: IBook) => ({
+        _id: book._id,
         Title: book.Title,
         Price: book.Price,
         DiscountPrice: book.DiscountPrice,
-        Category: book.category,
+        Category: book.Category,
         Writer: book.Writer,
         BookURL: book.BookURL,
         ImageURL: book.ImageURL,
@@ -56,9 +55,8 @@ export default function Home() {
 
       setBooks(mappedBooks);
       setCurrentPage(r.currentPage);
-      setTotalPages(r.totalPages);
       setTotalCount(r.totalCount)
-      setIsLoading(false);
+      // setIsLoading(false);
     });
   }, [currentPage, limit]);
 

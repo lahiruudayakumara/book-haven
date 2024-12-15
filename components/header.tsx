@@ -9,18 +9,16 @@ import ThemeToggle from "./thems/them-toggle";
 import { categories } from "@/data/category";
 import { menuItems } from "@/data/menu";
 import { useCart } from "@/context";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Header() {
-  const router = useRouter();
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [search, setSearch] = useState<string>("");
 
-  const { state, dispatch } = useCart();
+  const { state } = useCart();
 
-  const handleCategoryChange = (event: any) => {
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(event.target.value);
   };
 

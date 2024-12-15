@@ -14,10 +14,10 @@ import { categories } from "@/data/category";
 export default function Writer() {
   const [books, setBooks] = useState<IBook[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  // const [totalPages, setTotalPages] = useState<number>(1);
   const [limit, setLimit] = useState<number>(8);
   const [totalCount, setTotalCount] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // const [isLoading, setIsLoading] = useState<boolean>(true);
   const [category, setCategory] =useState<string>("All")
 
   useEffect(() => {
@@ -41,16 +41,16 @@ export default function Writer() {
     fetchEmployeeDetails().then((r) => {
       if ("error" in r) {
         console.error(r.error);
-        setIsLoading(false);
+        // setIsLoading(false);
         return;
       }
 
-      const mappedBooks = r.books.map((book: any) => ({
-        id: book._id,
+      const mappedBooks = r.books.map((book: IBook) => ({
+        _id: book._id,
         Title: book.Title,
         Price: book.Price,
         DiscountPrice: book.DiscountPrice,
-        Category: book.category,
+        Category: book.Category,
         Writer: book.Writer,
         BookURL: book.BookURL,
         ImageURL: book.ImageURL,
@@ -59,9 +59,9 @@ export default function Writer() {
 
       setBooks(mappedBooks);
       setCurrentPage(r.currentPage);
-      setTotalPages(r.totalPages);
+      // setTotalPages(r.totalPages);
       setTotalCount(r.totalCount);
-      setIsLoading(false);
+      // setIsLoading(false);
     });
   }, [currentPage, limit, category]);
   return (

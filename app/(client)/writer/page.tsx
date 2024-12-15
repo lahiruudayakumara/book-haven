@@ -1,7 +1,6 @@
 import BookWriter from "@/components/book-view/book-writer";
 import { PageHeader } from "@/components/page-header";
 import { ScreenContainer } from "@/components/screen-container";
-import { write } from "fs";
 
 const data = [
   { id: "1", name: "Jone" },

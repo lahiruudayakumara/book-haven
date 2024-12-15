@@ -1,4 +1,4 @@
-import { IBook, IGetBooK, IPostBook } from "@/types/book";
+import { IGetBooK, IPostBook } from "@/types/book";
 
 import ErrorResponse from "@/types/error-response";
 

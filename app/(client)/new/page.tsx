@@ -1,7 +1,5 @@
-import BookViewArea from "@/components/book-view/book-view-area";
 import { PageHeader } from "@/components/page-header";
 import { ScreenContainer } from "@/components/screen-container";
-import { books } from "@/data/books";
 
 export default function ContactUs() {
   return (

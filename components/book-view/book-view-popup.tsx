@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { X } from "lucide-react";
 
 interface Props {
@@ -29,10 +30,11 @@ export const BookViewPopup: React.FC<Props> = ({
               <X />
             </button>
             <div className="grid grid-cols-1 md:grid-cols-2 md:space-x-4">
-              <img
+              <Image
                 src={book.ImageURL}
                 className="w-full h-[275px] md:h-auto object-cover rounded-md"
                 alt={book.Title}
+                width={100}
               />
               <div>
                 <h2 className="text-xl font-semibold">{book.Title}</h2>

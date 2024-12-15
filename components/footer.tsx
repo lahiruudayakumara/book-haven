@@ -9,28 +9,29 @@ import { useState } from "react";
 
 export default function Footer() {
   const [email, setEmail] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
+    // setIsLoading(true);
+    // setErrorMessage(null);
+    // setSuccessMessage(null);
 
     const response = await postSubscribe(email);
 
     setEmail("");
 
     if (response?.error) {
-      setErrorMessage(response.error);
+      // setErrorMessage(response.error);
     } else {
-      setSuccessMessage("Payment rules successfully added!");
+      // setSuccessMessage("Payment rules successfully added!");
     }
 
-    setIsLoading(false);
+    // setIsLoading(false);
   };
+
 
   return (
     <div>
@@ -62,7 +63,7 @@ export default function Footer() {
                   <input
                     type="email"
                     value={email}
-                    onChange={(e: any) => setEmail(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                     placeholder="Search..."
                     className="flex-1 bg-transparent outline-none py-2 px-3 rounded-r-md text-black"
                   />

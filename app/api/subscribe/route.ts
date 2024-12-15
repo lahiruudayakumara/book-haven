@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import BookModel from "@/models/book";
 import Logger from "@/utils/logger";
 import SubscribeModel from "@/models/subscribe";
 import mongodb from "@/lib/database/mongodb";
