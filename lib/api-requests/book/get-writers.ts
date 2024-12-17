@@ -1,5 +1,6 @@
 import ErrorResponse from "@/types/error-response";
 import { IBookWriter } from "@/types/book";
+import Logger from "@/utils/logger";
 
 export default async function getWriters(): Promise<IBookWriter | ErrorResponse> {
     try {
@@ -13,7 +14,7 @@ export default async function getWriters(): Promise<IBookWriter | ErrorResponse>
 
         return await response.json();
     } catch (error) {
-        console.error("Error:", error);
+        Logger.error("Error:", error);
         return { error: "Internal server error" };
     }
 }

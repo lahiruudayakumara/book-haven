@@ -4,18 +4,6 @@ import Logger from "@/utils/logger";
 import SubscribeModel from "@/models/subscribe";
 import mongodb from "@/lib/database/mongodb";
 
-// export async function GET() {
-//     try {
-//         await mongodb();
-//         const companies = await BookModel.find({});
-//         console.log("GET /companies: ", companies);
-//         return NextResponse.json(companies, { status: 200 });
-//     } catch (error) {
-//         Logger.info("GET /companies ERROR: ", error);
-//         return NextResponse.json({ error: true }, { status: 500 });
-//     }
-// }
-
 export async function POST(req: NextRequest) {
     try {
         await mongodb();

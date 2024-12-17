@@ -6,6 +6,7 @@ import mongodb from "@/lib/database/mongodb";
 
 interface BookFilter {
     Category?: string | string[];
+    Title?: { $regex: string, $options: string };
 }
 
 export async function POST(request: NextRequest) {
@@ -15,14 +16,15 @@ export async function POST(request: NextRequest) {
         const category = formData.get("category")?.toString() || "";
         const page = parseInt(formData.get("page")?.toString() || "1", 10);
         const limit = parseInt(formData.get("limit")?.toString() || "10", 10);
+        const search = formData.get("keyword")?.toString() || "";
 
         let filter: BookFilter = {};
-        // if (search) {
-        //     filter = { ...filter, name: { $regex: search, $options: "i" } };
-        // }
+        if (search) {
+            filter = { ...filter, Title: { $regex: search, $options: "i" } };
+        }
 
-        if (category) {
-            filter = {...filter, Category: category}
+        if (category && category !== "All") {
+            filter = { ...filter, Category: category }
         }
 
         const books = await BookModel.find(filter)

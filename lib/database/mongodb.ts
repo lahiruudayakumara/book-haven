@@ -8,7 +8,7 @@ const connectMongoDB = async () => {
     if (isConnected) return;
 
     if (!process.env.MONGODB_URI) {
-      console.error("MongoDB URI is not defined in the environment variables.");
+      Logger.error("MongoDB URI is not defined in the environment variables.");
       return;
     }
 
@@ -16,7 +16,7 @@ const connectMongoDB = async () => {
     isConnected = true;
     Logger.info("DATABASE CONNECTED");
   } catch (error) {
-    console.error("DATABASE CONNECTION ERROR: ", error);
+    Logger.error("DATABASE CONNECTION ERROR: ", error);
   }
 };
 

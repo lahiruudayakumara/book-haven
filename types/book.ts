@@ -14,6 +14,7 @@ export interface IPostBook {
   category?: string,
   page?: number,
   limit?: number
+  keyword?: string
 }
 
 export interface IGetBooK {

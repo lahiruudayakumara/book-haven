@@ -1,6 +1,7 @@
 import { IGetBooK, IPostBook } from "@/types/book";
 
 import ErrorResponse from "@/types/error-response";
+import Logger from "@/utils/logger";
 
 export default async function allBooks(book: IPostBook): Promise<
     IGetBooK | ErrorResponse
@@ -21,6 +22,10 @@ export default async function allBooks(book: IPostBook): Promise<
             data.append("category", book.category)
         }
 
+        if (book.keyword) {
+            data.append("keyword", book.keyword)
+        }
+
 
         const response = await fetch("/api/book", {
             method: "POST",
@@ -30,10 +35,9 @@ export default async function allBooks(book: IPostBook): Promise<
             throw new Error("Failed to fetch books");
         }
         const books = await response.json();
-        console.log(books)
         return books;
     } catch (error) {
-        console.error("Error:", error);
+        Logger.error("Error:", error);
         return { error: "Internal server error" };
     }
 }

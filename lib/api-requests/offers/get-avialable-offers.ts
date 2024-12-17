@@ -1,5 +1,6 @@
 import ErrorResponse from "@/types/error-response";
 import { IOffer } from "@/types/offers";
+import Logger from "@/utils/logger";
 
 export const getAvialableOffers = async (): Promise<IOffer | ErrorResponse> => {
     try {
@@ -13,7 +14,7 @@ export const getAvialableOffers = async (): Promise<IOffer | ErrorResponse> => {
 
         return await response.json();
     } catch (error) {
-        console.error('Error fetching active offers:', error);
+        Logger.error('Error fetching active offers:', error);
         return { error: "Internal server error" };
     }
 };
