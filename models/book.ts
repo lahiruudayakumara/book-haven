@@ -1,8 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-import { IBook } from '@/types/book'; // Adjust the path to your interface
+import { IBook } from '@/types/book';
 
-// Define the schema for the book model
 const bookSchema: Schema = new Schema(
   {
     Title: {
@@ -39,11 +38,10 @@ const bookSchema: Schema = new Schema(
     },
   },
   {
-    timestamps: true, // This will automatically add createdAt and updatedAt fields
+    timestamps: true,
   }
 );
 
-// Prevent model overwrite by checking if it already exists in mongoose.models
 const BookModel = mongoose.models.Book || mongoose.model<IBook>('Book', bookSchema);
 
 export default BookModel;

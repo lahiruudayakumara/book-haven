@@ -22,3 +22,9 @@ export interface IGetBooK {
   totalCount: number,
   totalPages: number
 }
+
+export interface IBookWriter {
+  [x: string]: any;
+  _id: string;
+  name: string;
+}
