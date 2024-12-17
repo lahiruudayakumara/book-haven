@@ -49,7 +49,7 @@ export default function Header() {
                   id="cars"
                   value={selectedCategory}
                   onChange={handleCategoryChange}
-                  className="w-[100px] md:w-[150px] h-full bg-primary outline-none rounded-l-md text-center flex items-center justify-between cursor-pointer"
+                  className="w-14 sm:w-24 md:w-40 h-full bg-primary outline-none rounded-l-md text-center flex items-center justify-between cursor-pointer"
                 >
                   {categories.map((item) => (
                     <option
