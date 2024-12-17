@@ -8,6 +8,7 @@ import BookViewArea from "@/components/book-view/book-view-area";
 import BookViewAreaWithoutPagination from "@/components/book-view/book-view-area-without-pagination";
 import ErrorResponse from "@/types/error-response";
 import Image from "next/image";
+import Logger from "@/utils/logger";
 import { ScreenContainer } from "@/components/screen-container";
 import allBooks from "@/lib/api-requests/book/all-books";
 
@@ -36,15 +37,14 @@ export default function Home() {
 
         return response;
       } catch (error) {
-        console.error("Error fetching books:", error);
+        Logger.error("Error fetching books:", error);
         return { error: "Error fetching books" };
       }
     };
 
     fetchEmployeeDetails().then((r) => {
       if ("error" in r) {
-        console.error(r.error);
-        // setIsLoading(false);
+        Logger.error(r.error);
         return;
       }
 

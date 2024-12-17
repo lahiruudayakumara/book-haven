@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import BookViewAreaWithoutPagination from "@/components/book-view/book-view-area-without-pagination";
 import ErrorResponse from "@/types/error-response";
+import Logger from "@/utils/logger";
 import { PageHeader } from "@/components/page-header";
 import { ScreenContainer } from "@/components/screen-container";
 import allBooks from "@/lib/api-requests/book/all-books";
@@ -25,15 +26,14 @@ export default function ContactUs() {
 
         return response;
       } catch (error) {
-        console.error("Error fetching books:", error);
+        Logger.error("Error fetching books:", error);
         return { error: "Error fetching books" };
       }
     };
 
     fetchEmployeeDetails().then((r) => {
       if ("error" in r) {
-        console.error(r.error);
-        // setIsLoading(false);
+        Logger.error(r.error);
         return;
       }
 

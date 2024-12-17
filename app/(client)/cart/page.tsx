@@ -48,7 +48,7 @@ export default function Cart() {
                           key={item.id}
                           className="flex items-center gap-4 py-4 px-4"
                         >
-                          <div className="flex items-center gap-4 w-1/2">
+                          <div className="flex flex-col md:flex-row items-center gap-4 w-1/2">
                             <Image
                               src={item.img}
                               alt="img"
@@ -73,7 +73,7 @@ export default function Cart() {
                             </div>
                           </div>
 
-                          <div className="w-1/4 flex justify-center items-center gap-2">
+                          <div className="w-1/4 flex flex-col md:flex-row dark:text-gray-900 justify-center items-center gap-2">
                             <button
                               onClick={() =>
                                 dispatch({
@@ -85,7 +85,7 @@ export default function Cart() {
                             >
                               <Minus size={18} />
                             </button>
-                            <span className="font-bold">{item.quantity}</span>
+                            <span className="font-bold dark:text-white">{item.quantity}</span>
                             <button
                               onClick={() =>
                                 dispatch({
@@ -100,7 +100,7 @@ export default function Cart() {
                           </div>
 
                           {/* Price and Remove Button */}
-                          <div className="flex items-center justify-between w-1/4">
+                          <div className="flex items-center justify-between w-2/4 md:1/4">
                             <span>
                               LKR{" "}
                               {new Intl.NumberFormat("en-LK", {
@@ -143,7 +143,7 @@ export default function Cart() {
                   {state.items.map((item, index) => (
                     <div key={index} className="flex justify-between  text-sm">
                       <span>
-                        {item.name} (x{item.quantity})
+                        {item.name.length > 20 ? `${item.name.slice(0, 20)}...` : item.name} (x{item.quantity})
                       </span>
                       <span>LKR {item.price.toLocaleString()}</span>
                     </div>

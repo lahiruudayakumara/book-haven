@@ -70,7 +70,7 @@ const CheckoutPopup: React.FC<Props> = ({ show, onClose }) => {
     {
       title: "Items in Your Cart",
       content: (
-        <div>
+        <div className="dark:text-slate-200">
           {state.items.map((item, index) => (
             <div key={index} className="flex justify-between text-sm">
               <span>
@@ -184,8 +184,14 @@ const CheckoutPopup: React.FC<Props> = ({ show, onClose }) => {
                     className="border p-2 rounded-md"
                   />
                 </div>
-                <button className="bg-primary w-full h-[36px] mt-auto rounded-md text-white">Pay</button>
+                <button className="bg-primary w-full h-[36px] mt-auto rounded-md text-white">
+                  Pay
+                </button>
               </div>
+            </div>
+            <div className="mt-4 flex justify-between font-semibold py-2 border-t">
+              <span>Total Price:</span>
+              <span>LKR {state.total.toLocaleString()}</span>
             </div>
           </form>
         ),
@@ -194,9 +200,11 @@ const CheckoutPopup: React.FC<Props> = ({ show, onClose }) => {
 
   return show ? (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-3/4 md:w-1/2 lg:w-1/3">
+      <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg w-3/4 md:w-1/2 lg:w-1/3">
         <div className="flex justify-between">
-          <h1 className="text-2xl font-semibold">Checkout</h1>
+          <h1 className="text-2xl font-semibold dark:text-slate-200">
+            Checkout
+          </h1>
           <button
             onClick={handleClose}
             className="text-gray-500 hover:text-primary transition-colors"
@@ -239,7 +247,7 @@ const CheckoutPopup: React.FC<Props> = ({ show, onClose }) => {
           </div>
         </div>
         <div className="mt-4">
-          <h2 className="text-xl font-semibold mb-4">
+          <h2 className="text-xl font-semibold mb-4 dark:text-slate-200">
             {steps[currentStep - 1].title}
           </h2>
           {steps[currentStep - 1].content}

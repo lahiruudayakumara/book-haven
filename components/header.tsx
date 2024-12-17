@@ -9,12 +9,14 @@ import ThemeToggle from "./thems/them-toggle";
 import { categories } from "@/data/category";
 import { menuItems } from "@/data/menu";
 import { useCart } from "@/context";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Header() {
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [search, setSearch] = useState<string>("");
+  const router = useRouter();
 
   const { state } = useCart();
 
@@ -22,6 +24,18 @@ export default function Header() {
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setSelectedCategory(event.target.value);
+  };
+
+  const handleSearch = () => {
+    if (search.trim() !== "") {
+      router.push(`/search?category=${encodeURIComponent(selectedCategory)}&keyword=${encodeURIComponent(search)}`);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   return (
@@ -72,9 +86,11 @@ export default function Header() {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setSearch(e.target.value)
                 }
+                onKeyDown={handleKeyDown}
               />
               <button
                 disabled
+                onClick={handleSearch}
                 className={`bg-white rounded-r-md text-slate-700 px-2 ${
                   search === "" ? "" : "hover:text-primary"
                 }`}
@@ -130,10 +146,10 @@ export default function Header() {
               activeMenu ? "block duration-300 transition-all" : "hidden"
             } gap-4 md:gap-0 md:flex md:justify-between sticky`}
           >
-            <div className="px-4 md:w-[250px] p-2 md:bg-primary text-white md:text-center">
+            <div className="px-4 md:w-[250px] p-2 md:bg-primary dark:text-white md:text-center">
               ALL Categories
             </div>
-            <ul className="md:flex space-y-2 text-left mb-4 md:space-y-0 w-full px-4 items-center justify-between dark:text-white">
+            <ul className="md:flex space-y-2 md:text-center text-left mb-4 md:mb-0 md:space-y-0 w-full px-4 items-center justify-between dark:text-white">
               {menuItems.map((item) => (
                 <Link
                   key={item.id}
@@ -142,7 +158,7 @@ export default function Header() {
                   }}
                   href={item.link}
                 >
-                  <li className="hover:text-primary mb-2">{item.name}</li>
+                  <li className="hover:text-primary mb-2 md:mb-0">{item.name}</li>
                 </Link>
               ))}
             </ul>

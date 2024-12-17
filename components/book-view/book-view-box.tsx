@@ -26,7 +26,6 @@ const ViewBox: React.FC<Props> = ({ book }) => {
   const { addToast } = useToast();
   const { dispatch } = useCart();
   const [open, setOpen] = useState<boolean>(false);
-  console.log(book);
 
   const handleAddToCart = () => {
     dispatch({

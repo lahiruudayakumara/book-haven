@@ -5,6 +5,7 @@ import { Suspense, useEffect, useState } from "react";
 
 import BookViewBox from "@/components/book-view/book-view-box";
 import ErrorResponse from "@/types/error-response";
+import Logger from "@/utils/logger";
 import { PageHeader } from "@/components/page-header";
 import Pagination from "@/components/pagination";
 import { ScreenContainer } from "@/components/screen-container";
@@ -34,7 +35,7 @@ export default function Writer() {
 
         return response;
       } catch (error) {
-        console.error("Error fetching books:", error);
+        Logger.error("Error fetching books:", error);
         return { error: "Error fetching books" };
       } finally {
         setIsLoading(false); // Stop loading
@@ -43,7 +44,7 @@ export default function Writer() {
 
     fetchEmployeeDetails().then((r) => {
       if ("error" in r) {
-        console.error(r.error);
+        Logger.error(r.error);
         return;
       }
 
