@@ -1,12 +1,11 @@
 "use client";
 
-import React from "react";
-
 import Image from "next/image";
+import React from "react";
 
 interface Props {
   writer: {
-    id: string;
+    _id: string;
     name: string;
   };
 }

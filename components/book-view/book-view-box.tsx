@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { BookViewPopup } from "./book-view-popup";
 import Image from "next/image";
 import { useCart } from "@/context";
+import { useToast } from "../toast-provider";
 
 interface Props {
   book: {
@@ -22,6 +23,7 @@ interface Props {
 }
 
 const ViewBox: React.FC<Props> = ({ book }) => {
+  const { addToast } = useToast();
   const { dispatch } = useCart();
   const [open, setOpen] = useState<boolean>(false);
   console.log(book);
@@ -36,7 +38,8 @@ const ViewBox: React.FC<Props> = ({ book }) => {
         price: book.DiscountPrice,
         quantity: 1,
       },
-    });
+    })
+    addToast("Item added to cart", "success");
   };
 
   return (
@@ -56,7 +59,6 @@ const ViewBox: React.FC<Props> = ({ book }) => {
       <h1>
         {book.Title.length > 20 ? `${book.Title.slice(0, 20)}...` : book.Title}
       </h1>
-      {/* <p>{book.Description}</p> */}
       <p className="transition-colors duration-300 ease-in-out">
         LKR{" "}
         {new Intl.NumberFormat("en-LK", {

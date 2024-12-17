@@ -81,7 +81,7 @@ const CheckoutPopup: React.FC<Props> = ({ show, onClose }) => {
           ))}
           <div className="mt-4 flex justify-between font-semibold py-2 border-t">
             <span>Total Price:</span>
-            <span>LKR {state.total}</span>
+            <span>LKR {state.total.toLocaleString()}</span>
           </div>
         </div>
       ),

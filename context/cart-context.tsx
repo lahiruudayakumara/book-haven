@@ -1,9 +1,13 @@
-// src/context/CartContext.tsx
 "use client";
 
-import React, { ReactNode, createContext, useContext, useEffect, useReducer } from "react";
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 
-// Define the types for the cart context
 interface CartItem {
   id: string;
   img: string;
@@ -21,14 +25,15 @@ type CartAction =
   | { type: "ADD_ITEM"; payload: CartItem }
   | { type: "REMOVE_ITEM"; payload: string }
   | { type: "CLEAR_CART" }
-  | { type: "INITIALIZE_CART"; payload: CartState };
+  | { type: "INITIALIZE_CART"; payload: CartState }
+  | { type: "DECREASE_QUANTITY"; payload: string }
+  | { type: "INCREASE_QUANTITY"; payload: string };
 
 const initialState: CartState = {
   items: [],
   total: 0,
 };
 
-// Reducer function
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
     case "ADD_ITEM": {
@@ -51,7 +56,9 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       return { items: updatedItems, total: updatedTotal };
     }
     case "REMOVE_ITEM": {
-      const updatedItems = state.items.filter((item) => item.id !== action.payload);
+      const updatedItems = state.items.filter(
+        (item) => item.id !== action.payload
+      );
       const updatedTotal = updatedItems.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
@@ -62,12 +69,50 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       return initialState;
     case "INITIALIZE_CART":
       return action.payload;
+    case "DECREASE_QUANTITY": {
+      const existingItemIndex = state.items.findIndex(
+        (item) => item.id === action.payload
+      );
+      let updatedItems = [...state.items];
+
+      if (existingItemIndex > -1) {
+        updatedItems[existingItemIndex].quantity -= 0.5;
+        if (updatedItems[existingItemIndex].quantity <= 0) {
+          updatedItems = updatedItems.filter(
+            (item) => item.id !== action.payload
+          );
+        }
+      }
+
+      const updatedTotal = updatedItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      );
+
+      return { items: updatedItems, total: updatedTotal };
+    }
+    case "INCREASE_QUANTITY": {
+      const existingItemIndex = state.items.findIndex(
+        (item) => item.id === action.payload
+      );
+      let updatedItems = [...state.items];
+
+      if (existingItemIndex > -1) {
+        updatedItems[existingItemIndex].quantity += 0.5;
+      }
+
+      const updatedTotal = updatedItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      );
+
+      return { items: updatedItems, total: updatedTotal };
+    }
     default:
       return state;
   }
 };
 
-// Context creation
 const CartContext = createContext<{
   state: CartState;
   dispatch: React.Dispatch<CartAction>;
@@ -76,11 +121,9 @@ const CartContext = createContext<{
   dispatch: () => null,
 });
 
-// CartProvider component
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
 
-  // Load cart data from local storage on initial render
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
@@ -89,7 +132,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Save cart data to local storage whenever it changes
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(state));
   }, [state]);
@@ -101,5 +143,4 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Custom hook to use the cart context
 export const useCart = () => useContext(CartContext);

@@ -18,7 +18,9 @@ export default function Header() {
 
   const { state } = useCart();
 
-  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleCategoryChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setSelectedCategory(event.target.value);
   };
 
@@ -29,7 +31,7 @@ export default function Header() {
       <div className="w-full  divide-y-2">
         <ScreenContainer>
           <div className="flex justify-between p-2 md:p-0 dark:text-white">
-            <p>Telephone:- +94 (77) xxxxxxx</p>
+            <p>Telephone:- +94 (123) 456-7891</p>
             <p className="text-primary">White List</p>
           </div>
         </ScreenContainer>
@@ -131,10 +133,16 @@ export default function Header() {
             <div className="px-4 md:w-[250px] p-2 md:bg-primary text-white md:text-center">
               ALL Categories
             </div>
-            <ul className="md:flex space-y-2 text-center md:space-y-0 w-full px-4 items-center justify-between dark:text-white">
+            <ul className="md:flex space-y-2 text-left mb-4 md:space-y-0 w-full px-4 items-center justify-between dark:text-white">
               {menuItems.map((item) => (
-                <Link key={item.id} href={item.link}>
-                  <li className="hover:text-primary">{item.name}</li>
+                <Link
+                  key={item.id}
+                  onClick={() => {
+                    setActiveMenu(false);
+                  }}
+                  href={item.link}
+                >
+                  <li className="hover:text-primary mb-2">{item.name}</li>
                 </Link>
               ))}
             </ul>

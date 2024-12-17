@@ -3,7 +3,6 @@
 import React, { Suspense } from "react";
 
 import BookViewBox from "./book-view-box";
-import Pagination from "../pagination";
 import SkeletonBookBox from "../skelton/skelton-box";
 
 interface Props {
@@ -19,25 +18,9 @@ interface Props {
     Description: string;
   }[];
   title: string;
-  page: number;
-  totalPage: number;
-  limit: number;
-  itemsPerPageOptions?: number[];
-  onPageChange: (page: number) => void;
-  onLimitChange: (page: number) => void;
 }
 
-const BookViewArea: React.FC<Props> = ({
-  title,
-  book,
-  page,
-  totalPage,
-  limit,
-  itemsPerPageOptions,
-  onPageChange,
-  onLimitChange,
-}) => {
-  // const [popupView, setPopupView] = useState<boolean>(false);
+const BookViewAreaWithoutPagination: React.FC<Props> = ({ title, book }) => {
   const isLoading = book.length === 0;
 
   return (
@@ -54,7 +37,7 @@ const BookViewArea: React.FC<Props> = ({
       >
         {isLoading ? (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
-            {[...Array(12)].map((_, i) => (
+            {[...Array(6)].map((_, i) => (
               <SkeletonBookBox key={i} />
             ))}
           </div>
@@ -70,16 +53,8 @@ const BookViewArea: React.FC<Props> = ({
           </div>
         )}
       </Suspense>
-      <Pagination
-        currentPage={page}
-        totalItems={totalPage}
-        itemsPerPage={limit}
-        onItemsPerPageChange={onLimitChange}
-        onPageChange={onPageChange}
-        itemsPerPageOptions={itemsPerPageOptions}
-      />
     </div>
   );
 };
 
-export default BookViewArea;
+export default BookViewAreaWithoutPagination;

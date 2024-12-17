@@ -11,7 +11,7 @@ export async function GET() {
 
     return NextResponse.json(activeOffers);
   } catch (error) {
-    console.error('Error fetching active offers:', error);
+    Logger.error('Error fetching active offers:', error);
     return NextResponse.error();
   }
 }

@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-
 import BookModel from "@/models/book";
 import Logger from "@/utils/logger";
+import { NextResponse } from "next/server";
 import mongodb from "@/lib/database/mongodb";
 
 export async function GET() {

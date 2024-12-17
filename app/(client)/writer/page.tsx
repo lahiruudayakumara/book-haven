@@ -1,21 +1,48 @@
+"use client";
+
+import { Suspense, useEffect, useState } from "react";
+
 import BookWriter from "@/components/book-view/book-writer";
+import ErrorResponse from "@/types/error-response";
+import { IBookWriter } from "@/types/book";
 import { PageHeader } from "@/components/page-header";
 import { ScreenContainer } from "@/components/screen-container";
-
-const data = [
-  { id: "1", name: "Jone" },
-  { id: "2", name: "Alice" },
-  { id: "3", name: "Bob" },
-  { id: "4", name: "Charlie" },
-  { id: "5", name: "David" },
-  { id: "6", name: "Eve" },
-  { id: "7", name: "Frank" },
-  { id: "8", name: "Grace" },
-  { id: "9", name: "Hank" },
-  { id: "10", name: "Ivy" },
-];
+import SkeletonAvatar from "@/components/skelton/skelton-avatar";
+import getWriters from "@/lib/api-requests/book/get-writers";
 
 export default function Writer() {
+  const [writers, setWriters] = useState<IBookWriter[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchWriterDetails = async (): Promise<
+      IBookWriter | ErrorResponse
+    > => {
+      setIsLoading(true);
+      try {
+        const response = await getWriters();
+        return response;
+      } catch (error) {
+        console.error("Error fetching writers:", error);
+        return { error: "Error fetching writers" };
+      }
+    };
+    fetchWriterDetails().then((r) => {
+      if ("error" in r) {
+        console.error(r.error);
+        return;
+      }
+
+      setWriters(
+        r.writers.map((writer: IBookWriter) => ({
+          _id: writer.id,
+          name: writer.writer,
+        }))
+      );
+      setIsLoading(false);
+    });
+  }, []);
+
   return (
     <div>
       <PageHeader
@@ -24,11 +51,34 @@ export default function Writer() {
       />
       <div className="flex flex-col items-center md:min-h-[27vh] justify-center space-y-4">
         <ScreenContainer>
+        <Suspense
+        fallback={
           <div className="grid grid-cols-2 md:grid-col-3 lg:grid-cols-6 gap-3 md:gap-4 py-6">
-            {data.map((data) => (
-                <BookWriter key={data.id} writer={data} />
+            {[...Array(8)].map((_, i) => (
+              <SkeletonAvatar key={i} />
             ))}
           </div>
+        }
+      >
+        {isLoading ? (
+          <div className="grid grid-cols-2 md:grid-col-3 lg:grid-cols-6 gap-3 md:gap-4 py-6">
+            {[...Array(12)].map((_, i) => (
+              <SkeletonAvatar key={i} />
+            ))}
+          </div>
+        ) : writers.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-col-3 lg:grid-cols-6 gap-3 md:gap-4 py-6">
+            {writers.map((writers) => (
+              <BookWriter key={writers._id} writer={writers} />
+            ))}
+          </div>
+        ) : (
+          <div className="col-span-2 md:col-span-3 lg:col-span-4 h-auto my-auto text-center w-full">
+            No wriers found
+          </div>
+        )}
+      </Suspense>
+
         </ScreenContainer>
       </div>
     </div>

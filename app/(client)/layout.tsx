@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Elements } from "@stripe/react-stripe-js";
 import Footer from "@/components/footer";
@@ -16,10 +16,9 @@ export default function Layout({
 }>) {
   return (
     <div>
-      <Header /><Elements stripe={stripePromise}>
-      <div className="min-h-full">
-      {children}
-      </div>
+      <Header />
+      <Elements stripe={stripePromise}>
+        <div className="min-h-full">{children}</div>
       </Elements>
       <Footer />
     </div>
