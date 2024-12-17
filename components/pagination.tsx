@@ -34,18 +34,9 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center space-y-4 mt-12">
-      {/* Page Navigation */}
-      <div className="flex justify-center items-center space-x-2">
-        <button
-          className="p-2 bg-primary text-white rounded hover:bg-gray-300 disabled:opacity-50"
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Prev
-        </button>
+    <div className="flex flex-col md:flex-row justify-between items-center space-y-4 mt-12">
 
-        <div className="flex items-center space-x-2">
+      <div className="md:flex items-center space-x-2 hidden">
           <label htmlFor="itemsPerPage" className="text-sm font-medium">
             Items per page:
           </label>
@@ -62,6 +53,16 @@ const Pagination: React.FC<PaginationProps> = ({
             ))}
           </select>
         </div>
+        
+      <div className="flex justify-center items-center space-x-2">
+        <button
+          className="p-2 bg-primary text-white rounded hover:bg-gray-300 disabled:opacity-50"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+
 
         <span>
           Page {currentPage} of {totalPages}

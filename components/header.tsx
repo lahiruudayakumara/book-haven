@@ -49,11 +49,8 @@ export default function Header() {
                   id="cars"
                   value={selectedCategory}
                   onChange={handleCategoryChange}
-                  className="w-[150px] h-full bg-primary outline-none rounded-l-md text-center flex items-center justify-between cursor-pointer"
+                  className="w-[100px] md:w-[150px] h-full bg-primary outline-none rounded-l-md text-center flex items-center justify-between cursor-pointer"
                 >
-                  <option value="All" className="bg-white text-black w-full">
-                    All
-                  </option>
                   {categories.map((item) => (
                     <option
                       key={item.id}

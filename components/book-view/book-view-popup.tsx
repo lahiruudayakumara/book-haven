@@ -35,6 +35,7 @@ export const BookViewPopup: React.FC<Props> = ({
                 className="w-full h-[275px] md:h-auto object-cover rounded-md"
                 alt={book.Title}
                 width={100}
+                height={100}
               />
               <div>
                 <h2 className="text-xl font-semibold">{book.Title}</h2>

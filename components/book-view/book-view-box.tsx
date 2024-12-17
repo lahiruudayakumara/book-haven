@@ -1,4 +1,3 @@
-
 "use client";
 
 import { CirclePlus, Eye } from "lucide-react";
@@ -42,7 +41,11 @@ const ViewBox: React.FC<Props> = ({ book }) => {
 
   return (
     <div className="shadow-md min-h[450px] hover:shadow-lg p-2 rounded-md space-y-1 dark:bg-gray-800 dark:text-white group transition-all duration-300 ease-in-out">
-      <BookViewPopup book={book} open={open} handleClosePopup={() => setOpen(!open)} />
+      <BookViewPopup
+        book={book}
+        open={open}
+        handleClosePopup={() => setOpen(!open)}
+      />
       <Image
         src={book.ImageURL}
         className="w-full h-[275px] rounded-md transform group-hover:scale-105 transition-transform duration-300 ease-in-out"
@@ -50,7 +53,9 @@ const ViewBox: React.FC<Props> = ({ book }) => {
         width={100}
         height={100}
       />
-      <h1>{book.Title}</h1>
+      <h1>
+        {book.Title.length > 20 ? `${book.Title.slice(0, 20)}...` : book.Title}
+      </h1>
       {/* <p>{book.Description}</p> */}
       <p className="transition-colors duration-300 ease-in-out">
         LKR{" "}
@@ -75,14 +80,17 @@ const ViewBox: React.FC<Props> = ({ book }) => {
                 .trim()}
         </span>
       </p>
-      <div className="flex justify-end gap-3 group-hover:opacity-100 opacity-0 transform transition-all duration-300 ease-in-out">
+      <div className="flex justify-end gap-3 md:group-hover:opacity-100 md:opacity-0 transform transition-all duration-300 ease-in-out">
         <div
           className="cursor-pointer hover:text-primary transition-colors duration-300 ease-in-out"
           onClick={handleAddToCart}
         >
           <CirclePlus />
         </div>
-        <div onClick={() => setOpen(true)} className="cursor-pointer hover:text-primary transition-colors duration-300 ease-in-out">
+        <div
+          onClick={() => setOpen(true)}
+          className="hidden md:block cursor-pointer hover:text-primary transition-colors duration-300 ease-in-out"
+        >
           <Eye />
         </div>
       </div>
