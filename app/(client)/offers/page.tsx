@@ -51,7 +51,7 @@ export default function Offers() {
   }, []);
   return (
     <div>
-      <PageHeader title="Offers" description="This is the cart page" />
+      <PageHeader title="Offers" description="Explore the latest deals and exclusive offers available for you." />
       <ScreenContainer>
         <Suspense
           fallback={

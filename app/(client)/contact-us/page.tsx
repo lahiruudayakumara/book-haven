@@ -9,7 +9,7 @@ export default function ContactUs() {
         description="Have questions or need assistance? Reach out to us directly, and we'll be happy to help you."
       />
       <ScreenContainer>
-        <div className="flex flex-col items-center md:min-h-[27vh] text-gray-200 justify-center space-y-4 py-8">
+        <div className="flex flex-col items-center md:min-h-[27vh] dark:text-gray-200 justify-center space-y-4 py-8">
           <p className="font-bold">We had love to hear from you!</p>
           <p>
             If you have any inquiries feedback or need help with your orders

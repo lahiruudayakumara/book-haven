@@ -28,7 +28,7 @@ export default function Cart() {
           setShowCheckout(false);
         }}
       />
-      <PageHeader title="Cart" description="This is the cart page" />
+      <PageHeader title="Cart" description="Review your selected items, update quantities, and proceed to checkout." />
       <div className="flex flex-col h-auto items-center w-full py-14 ">
         <div className="w-full lg:w-2/3 h-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4 px-2 md:px-0">
