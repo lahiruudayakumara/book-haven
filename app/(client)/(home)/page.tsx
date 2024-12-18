@@ -72,11 +72,11 @@ export default function Home() {
       <ScreenContainer>
         <div className="w-full h-auto">
           <div className="overflow-hidden md:grid grid-cols-2 gap-2 mb-4 px-2 md:px-0">
-            <div className="bg-gray-200 md:min-h-[500px]">
+            <div className="bg-gray-200 md:min-h-[500px] ">
               <Image
-                src="/logo.png"
-                width={100}
-                height={100}
+                src="/banner_main.png"
+                width={1000}
+                height={400}
                 className="w-full h-full"
                 alt="main-banner"
               />
@@ -84,18 +84,18 @@ export default function Home() {
             <div className="md:grid grid-rows-2 gap-2 hidden">
               <div className="bg-gray-200">
                 <Image
-                  src="/logo.png"
-                  width={100}
-                  height={100}
+                  src="/christmas2024.png"
+                  width={1000}
+                  height={400}
                   className="w-full h-full"
                   alt="main-banner"
                 />
               </div>
               <div className="bg-gray-200">
                 <Image
-                  src="/logo.png"
-                  width={100}
-                  height={100}
+                  src="/banner_2.png"
+                  width={1000}
+                  height={400}
                   className="w-full h-full"
                   alt="main-banner"
                 />

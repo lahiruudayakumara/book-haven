@@ -322,7 +322,7 @@ const CheckoutPopup: React.FC<Props> = ({ show, onClose }) => {
                 handleNextStep();
               }
               if (currentStep === 4) {
-                onClose();
+                handleClose();
               }
             }}
             className="px-4 py-2 rounded-md bg-primary text-white"
