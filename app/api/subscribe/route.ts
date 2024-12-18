@@ -10,6 +10,16 @@ export async function POST(req: NextRequest) {
         const data = await req.formData();
         const email = data.get("email");
 
+        if (!email) {
+            return NextResponse.json({ message: "Invalid input: Missing required fields" }, { status: 400 });
+        }
+
+        const existingEmail = await SubscribeModel.findOne({ email: email });
+
+        if (existingEmail) {
+            return NextResponse.json({ error: "Email already subscribed" }, { status: 400 });
+        }
+
         const newBook = new SubscribeModel({ email: email });
         await newBook.save();
         return NextResponse.json(newBook, { status: 201 });

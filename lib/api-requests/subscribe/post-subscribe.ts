@@ -21,7 +21,8 @@ export default async function postSubscribe(email: string): Promise<ErrorRespons
                 "Failed to subbscribe . Status:",
                 response.status
             );
-            return { error: "Failed to subscribe" };
+            const errorResponse = await response.json();
+            return { error: errorResponse.error };
         }
 
         return await response.json();
