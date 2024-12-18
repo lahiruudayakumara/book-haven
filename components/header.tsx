@@ -109,18 +109,12 @@ export default function Header() {
                 <div className="flex gap-2 dark:text-primary">
                   <Truck size={28} />
                   <span className="hidden md:block">Delivery</span>
-                  <div className="absolute text-white text-sm -mt-2 ml-3 bg-red-500 rounded-full w-6 h-6 text-center">
-                    11
-                  </div>
                 </div>
               </Link>
               <Link href="offers">
                 <div className="flex gap-2 dark:text-primary">
                   <Gift size={28} />
                   <span className="hidden md:block">Offers</span>
-                  <div className="absolute text-white text-sm -mt-2 ml-3 bg-red-500 rounded-full w-6 h-6 text-center">
-                    11
-                  </div>
                 </div>
               </Link>
               <Link href="/cart">
@@ -146,10 +140,10 @@ export default function Header() {
               activeMenu ? "block duration-300 transition-all" : "hidden"
             } gap-4 md:gap-0 md:flex md:justify-between sticky`}
           >
-            <div className="px-4 md:w-[250px] p-2 md:bg-primary dark:text-white md:text-center">
+            {/* <div className="px-4 md:w-[250px] p-2 md:bg-primary dark:text-white md:text-center">
               ALL Categories
-            </div>
-            <ul className="md:flex space-y-2 md:text-center text-left mb-4 md:mb-0 md:space-y-0 w-full px-4 items-center justify-between dark:text-white">
+            </div> */}
+            <ul className="md:flex p-2 space-y-2 md:text-center text-left mb-4 md:mb-0 md:space-y-0 w-full px-4 items-center gap-12 dark:text-white">
               {menuItems.map((item) => (
                 <Link
                   key={item.id}

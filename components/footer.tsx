@@ -25,7 +25,7 @@ export default function Footer() {
     const response = await postSubscribe(email);
 
     setEmail("");
-
+    
     if (response?.error) {
       addToast(response.error, "error");
     } else {

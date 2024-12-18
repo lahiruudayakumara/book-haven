@@ -156,16 +156,18 @@ export default function Cart() {
                   <span>Total Price:</span>
                   <span>LKR {state.total.toLocaleString()}</span>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 text-sm">
                   <button
                     onClick={() => dispatch({ type: "CLEAR_CART" })}
                     className="bg-gray-800 mt-4 w-1/3 text-white p-3 rounded-md dark:bg-slate-200 dark:text-black"
+                    disabled={state.items.length === 0}
                   >
                     Clear Cart
                   </button>
                   <button
                     onClick={() => setShowCheckout(true)}
                     className=" bg-primary mt-4 w-full text-white p-3 rounded-md"
+                    disabled={state.items.length === 0}
                   >
                     PROCCEED TO CHECKOUT
                   </button>

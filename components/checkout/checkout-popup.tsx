@@ -4,12 +4,21 @@ import {
   CardCvcElement,
   CardExpiryElement,
   CardNumberElement,
+  useElements,
+  useStripe,
 } from "@stripe/react-stripe-js";
-import { CreditCard, Truck, X } from "lucide-react";
 
+import { Checkout } from "@/types/checkout";
+import ErrorResponse from "@/types/error-response";
 import Input from "../form/input";
+import Logger from "@/utils/logger";
+import { StripeCardNumberElement } from "@stripe/stripe-js";
+import { X } from "lucide-react";
+import createOrder from "@/lib/api-requests/checkout/post-checkout";
+import { createPaymentIntent } from "@/lib/api-requests/stripe/post-stripe";
 import { useCart } from "@/context";
 import { useState } from "react";
+import { useToast } from "../toast-provider";
 
 interface Props {
   show: boolean;
@@ -17,6 +26,9 @@ interface Props {
 }
 
 const CheckoutPopup: React.FC<Props> = ({ show, onClose }) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const { addToast } = useToast();
   const { state } = useCart();
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [formData, setFormData] = useState({
@@ -27,8 +39,6 @@ const CheckoutPopup: React.FC<Props> = ({ show, onClose }) => {
     email: "",
     paymentMethod: "",
   });
-  const [paymentMethod, setPaymentMethod] =
-    useState<string>("cash-on-delivery");
   const [cardHolderName, setCardHolderName] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +62,77 @@ const CheckoutPopup: React.FC<Props> = ({ show, onClose }) => {
       email: "",
       paymentMethod: "",
     });
+  };
+
+  const createOrderItems = async (payId: string): Promise<Checkout | ErrorResponse> => {
+    try {
+      const response = createOrder({
+        items: state.items.map((item) => ({
+          product_id: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        totalAmount: state.total,
+        customerDetails: {
+          name: formData.name,
+          email: formData.email,
+          address: formData.address,
+          city: formData.city,
+          phone: formData.phone,
+        },
+        paymentId: payId,
+        orderDate: new Date().toDateString(),
+        readyDate: "1-2 days",
+        shipmentDate: "3-5 days",
+      });
+
+      if ("error" in response) {
+        // setShowUpdateErrorModal(true);
+        return { error: "Error creating order" };
+      } else {
+        return response;
+      }
+    } catch (error) {
+      Logger.error("Error:", error);
+      return { error: "Error creating order" };
+    }
+  };
+
+  const handlerPayment = async () => {
+    try {
+      if (!stripe || !elements) return;
+
+      const paymentIntentResponse = await createPaymentIntent(state.total);
+      if ("error" in paymentIntentResponse) {
+        throw new Error(paymentIntentResponse.error);
+      }
+      const { clientSecret } = paymentIntentResponse;
+
+      const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(
+            CardNumberElement
+          ) as StripeCardNumberElement,
+          billing_details: {
+            name: cardHolderName,
+          },
+        },
+      });
+
+      if (paymentResult.error) {
+        addToast(`Payment failed: ${paymentResult.error.message}`, "error");
+      } else if (paymentResult.paymentIntent?.status === "succeeded") {
+        createOrderItems(paymentResult.paymentIntent.id).then((response) => {
+          if (!('error' in response)) {
+            setCurrentStep(4);
+          }
+        });
+      }
+    } catch (error) {
+      Logger.error("Error:", error);
+      addToast("An error occurred while processing the payment.", "error");
+    }
   };
 
   const elementStyles = {
@@ -103,98 +184,67 @@ const CheckoutPopup: React.FC<Props> = ({ show, onClose }) => {
       ),
     },
     {
-      title: "Choose Payment Method",
+      title: "Credit Card Payment",
       content: (
-        <div className="flex gap-2 md:gap-8 justify-center">
-          {[
-            {
-              id: "cash-on-delivery",
-              icon: <Truck />,
-              label: "Cash on Delivery",
-            },
-            { id: "card", icon: <CreditCard />, label: "Credit Card" },
-          ].map((method) => (
-            <div
-              key={method.id}
-              className={`p-4 rounded-md flex flex-col items-center cursor-pointer w-[150px] ${
-                paymentMethod === method.id
-                  ? "bg-primary text-white"
-                  : "bg-slate-200"
-              }`}
-              onClick={() => setPaymentMethod(method.id)}
-              role="button"
-              tabIndex={0}
-              aria-pressed={paymentMethod === method.id}
+        <div>
+          <div className="mb-4">
+            <label
+              htmlFor="cardHolderName"
+              className="block text-sm font-medium"
             >
-              {method.icon}
-              <p className="text-sm mt-2">{method.label}</p>
-            </div>
-          ))}
-        </div>
-      ),
-    },
-    {
-      title:
-        paymentMethod === "cash-on-delivery"
-          ? "Cash on Delivery"
-          : "Credit Card Payment",
-      content:
-        paymentMethod === "cash-on-delivery" ? (
-          <p>Your order will be paid upon delivery.</p>
-        ) : (
-          <form>
-            <div className="mb-4">
-              <label
-                htmlFor="cardHolderName"
-                className="block text-sm font-medium"
-              >
-                Cardholder Name
-              </label>
-              <input
-                id="cardHolderName"
-                type="text"
-                value={cardHolderName}
-                onChange={(e) => setCardHolderName(e.target.value)}
-                placeholder="John Doe"
-                className="w-full border rounded-md p-2"
+              Cardholder Name
+            </label>
+            <input
+              id="cardHolderName"
+              type="text"
+              value={cardHolderName}
+              onChange={(e) => setCardHolderName(e.target.value)}
+              placeholder="John Doe"
+              className="w-full border rounded-md p-2"
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium">Card Number</label>
+              <CardNumberElement
+                options={elementStyles}
+                className="border p-2 rounded-md"
               />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="col-span-2 grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium">Card Number</label>
-                <CardNumberElement
+                <label className="block text-sm font-medium">Expiry Date</label>
+                <CardExpiryElement
                   options={elementStyles}
                   className="border p-2 rounded-md"
                 />
               </div>
-              <div className="col-span-2 grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium">
-                    Expiry Date
-                  </label>
-                  <CardExpiryElement
-                    options={elementStyles}
-                    className="border p-2 rounded-md"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium">CVC</label>
-                  <CardCvcElement
-                    options={elementStyles}
-                    className="border p-2 rounded-md"
-                  />
-                </div>
-                <button className="bg-primary w-full h-[36px] mt-auto rounded-md text-white">
-                  Pay
-                </button>
+              <div>
+                <label className="block text-sm font-medium">CVC</label>
+                <CardCvcElement
+                  options={elementStyles}
+                  className="border p-2 rounded-md"
+                />
               </div>
             </div>
-            <div className="mt-4 flex justify-between font-semibold py-2 border-t">
-              <span>Total Price:</span>
-              <span>LKR {state.total.toLocaleString()}</span>
-            </div>
-          </form>
-        ),
+          </div>
+          <div className="mt-4 flex justify-between font-semibold py-2 border-t">
+            <span>Total Price:</span>
+            <span>LKR {state.total.toLocaleString()}</span>
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: "Your Paymet Suceessfully Done",
+      content: (
+        <div className="flex gap-2 md:gap-8 justify-center">
+          <p className="text-sm text-center dark:text-slate-200">
+            Your payment has been successfully processed. You will receive an
+            email confirmation shortly.
+          </p>
+        </div>
+      ),
     },
   ];
 
@@ -247,7 +297,11 @@ const CheckoutPopup: React.FC<Props> = ({ show, onClose }) => {
           </div>
         </div>
         <div className="mt-4">
-          <h2 className="text-xl font-semibold mb-4 dark:text-slate-200">
+          <h2
+            className={`font-semibold mb-4 dark:text-slate-200 ${
+              currentStep === 4 ? "text-center" : "text-xl"
+            }`}
+          >
             {steps[currentStep - 1].title}
           </h2>
           {steps[currentStep - 1].content}
@@ -261,11 +315,34 @@ const CheckoutPopup: React.FC<Props> = ({ show, onClose }) => {
             Prev
           </button>
           <button
-            onClick={handleNextStep}
+            onClick={() => {
+              if (currentStep === 3) {
+                handlerPayment();
+              } else {
+                handleNextStep();
+              }
+              if (currentStep === 4) {
+                onClose();
+              }
+            }}
             className="px-4 py-2 rounded-md bg-primary text-white"
-            disabled={currentStep === steps.length}
+            disabled={
+              currentStep === steps.length || currentStep === 2
+                ? !formData.name ||
+                  !formData.address ||
+                  !formData.city ||
+                  !formData.phone ||
+                  !formData.email  : false ||
+                  currentStep === 3
+                  ? !cardHolderName
+                  : false
+            }
           >
-            {currentStep === steps.length ? "Finish" : "Next"}
+            {currentStep === steps.length
+              ? "Finish"
+              : currentStep === 3
+              ? "Pay"
+              : "Next"}
           </button>
         </div>
       </div>
