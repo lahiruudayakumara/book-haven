@@ -75,8 +75,8 @@ export default function Writer() {
       <div className="flex flex-col items-center md:min-h-[27vh] justify-center space-y-2">
         <ScreenContainer>
           <div className="grid grid-cols-4 w-full py-4 gap-8">
-            <div className="min-h-[350px] md:max-h-[550px] bg-slate-100 p-4 rounded-md">
-              <h1 className="text-black text-xl font-bold">Categories</h1>
+            <div className="min-h-[350px] md:max-h-[550px] bg-slate-100 dark:bg-gray-800 p-4 rounded-md">
+              <h1 className="text-black text-xl font-bold dark:text-slate-200">Categories</h1>
               <div className="flex flex-col mt-4 space-y-4">
                 {categories.map((item) => (
                   <span
@@ -92,9 +92,9 @@ export default function Writer() {
               </div>
             </div>
             <div className="col-span-3">
-              <div className="w-full flex bg-slate-100 mb-4 rounded-md text-black p-2 px-4">
+              {/* <div className="w-full flex bg-slate-100 mb-4 rounded-md text-black p-2 px-4">
                 <div className="ml-auto ">Filter</div>
-              </div>
+              </div> */}
               {/* Content with Loading */}
               <Suspense
                 fallback={
