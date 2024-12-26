@@ -89,7 +89,7 @@ export default function Header() {
                 onKeyDown={handleKeyDown}
               />
               <button
-                disabled
+                disabled={search === ""}
                 onClick={handleSearch}
                 className={`bg-white rounded-r-md text-slate-700 px-2 ${
                   search === "" ? "" : "hover:text-primary"
