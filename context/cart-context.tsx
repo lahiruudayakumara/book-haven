@@ -76,7 +76,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       let updatedItems = [...state.items];
 
       if (existingItemIndex > -1) {
-        updatedItems[existingItemIndex].quantity -= 0.5;
+        updatedItems[existingItemIndex].quantity -= 1;
         if (updatedItems[existingItemIndex].quantity <= 0) {
           updatedItems = updatedItems.filter(
             (item) => item.id !== action.payload
@@ -98,7 +98,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       let updatedItems = [...state.items];
 
       if (existingItemIndex > -1) {
-        updatedItems[existingItemIndex].quantity += 0.5;
+        updatedItems[existingItemIndex].quantity += 1;
       }
 
       const updatedTotal = updatedItems.reduce(
